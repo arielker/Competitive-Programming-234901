@@ -3,4 +3,4 @@ project(Competitive_Programming_234901)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(Competitive_Programming_234901 hw0/hw0qB.cpp)
+add_executable(Competitive_Programming_234901 hw0/uva_195.cpp)
