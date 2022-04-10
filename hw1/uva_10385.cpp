@@ -28,18 +28,15 @@ typedef vector<int> vi;
 typedef pair<int, int> pii;
 typedef pair<double, double> pdd;
 
-///first is running speed (r) and then cycling speed (k)
-
 constexpr double EPS = 1e-8;
+constexpr int MAX_CONTESTANTS = 20;
 
-typedef pair<double, double> pdd;
-
-int n;
-double t;
-pdd speeds[20];
+int n; ///contestants (< 20)
+double t; ///total road race distance
+pdd speeds[MAX_CONTESTANTS];
 
 double getTime(pdd speed, pdd length) {
-    return length.first / speed.first + length.second / speed.second;
+    return (length.first / speed.first) + (length.second / speed.second);
 }
 
 double getDiff(double l) {
@@ -55,17 +52,22 @@ double getDiff(double l) {
     return (cheaterTime - *min_element(times.begin(), times.end())) * 3600.00;
 }
 
+///first is running speed (r) and then cycling speed (k)
+
 int main() {
     cout << fixed << setprecision(2);
 
     while (cin >> t) {
+//        cout << "t = " << t << endl;
         cin >> n;
-        for (auto &i: speeds) {
-            cin >> i.first >> i.second;
+//        cout << "n = " << n << endl;
+        for (int i = 0; i < n; i++) {
+            cin >> speeds[i].first >> speeds[i].second;
+//            cout << speeds[i].first << " " << speeds[i].second << endl;
         }
 
         ///ternary search
-        double l = 0;
+        double l = 0.0;
         double r = t;
 
         while (fabs(r - l) > EPS) {
@@ -75,12 +77,12 @@ int main() {
             getDiff(mr) < getDiff(ml) ? (r = ml) : (l = mr);
         }
 
-        double b = getDiff(l);
-        if (b > 0) {
+        double b = -getDiff(l); ///not really sure why minus is needed
+        if (b < 0) {
             cout << "The cheater cannot win." << endl;
         } else {
             cout << "The cheater can win by "
-                 << (int) round(-b)
+                 << (int) round(b)
                  << " seconds with r = " << l << "km and k = " << t - l
                  << "km." << endl;
         }
