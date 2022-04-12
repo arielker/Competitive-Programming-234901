@@ -22,12 +22,11 @@ typedef unsigned long long ull;
 typedef vector<int> vi;
 typedef pair<int, int> pii;
 
-const int MAXSUM = 300005;
-const int MAXELEMENTS = 35;
-const int MAXN = 35;
-const int MAXCOMBINATIONS = (1<<30) + 2;
+constexpr int MAXSUM = 300005;
+constexpr int MAXELEMENTS = 35;
+constexpr int MAXN = 35;
 
-int _g, g, m, n, t, sum, curr, win, lose;
+int x, g, m, n, t, sum, curr, win, lose;
 pair<int, int> p;
 int leftSize, rightSize;
 int tiles[MAXELEMENTS];
@@ -35,7 +34,7 @@ int factorial[MAXELEMENTS];
 int leftt[MAXN][MAXSUM];
 int rightt[MAXN][MAXSUM];
 
-// Use pascal triangle to compute n choose k
+
 int getFactorial(int n, int k) {
 
     memset(factorial, 0, sizeof(factorial));
@@ -68,7 +67,7 @@ void countSubArray(int tiles[], int n, int m, int sub[][MAXSUM], int offset) {
 }
 
 // Implementation of subset sum algorithm using meet in the middle technique
-pair<int, int> countCombinations(int tiles[], int t, int n, int m) {
+pii countCombinations(int tiles[], int t, int n, int m) {
 
     if ((n == 0 && t ==0) || m == 0) {
         return make_pair(1, 0);
@@ -101,24 +100,42 @@ pair<int, int> countCombinations(int tiles[], int t, int n, int m) {
     return make_pair(win, lose);
 }
 
-int main(void) {
+int main() {
 
-    scanf("%d", &g);
-    _g = 0;
+    cin >> g;
+    x = 0;
 
-    while (g > 0) {
-        _g++;
+    while (g-- > 0) {
+        x++;
 
-        scanf("%d", &m);
+        cin >> m;
         for (int i = 0; i < m; i++) {
-            scanf("%d", &tiles[i]);
+            cin >> tiles[i];
         }
-        scanf("%d %d", &n, &t);
+        cin >> n >> t;
 
         p = countCombinations(tiles, t, n, m);
 
-        printf("Game %d -- %d : %d\n", _g, p.first, getFactorial(m, n) - p.first);
-
-        g--;
+        cout << "Game " << x << " -- " << p.first << " : " << getFactorial(m,n) - p.first << endl;
     }
 }
+
+/*
+5
+2
+1 2
+2 3
+2
+2 3
+2 3
+5
+1 2 3 4 5
+2 5
+10
+1 2 2 2 2 2 2 2 2 2
+3 6
+10
+1 2 2 2 2 2 2 2 2 2
+0 0
+
+ */
