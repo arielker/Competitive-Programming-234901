@@ -28,39 +28,39 @@ typedef pair<int, int> pii;
 
 const int MAX = 2000001;
 
-struct tree{
+struct tree {
     int sz = 2;
     vi s_tree;
 
-    void init(int n){
-        while (sz < n){
+    void init(int n) {
+        while (sz < n) {
             sz *= 2;
         }
         this->s_tree = vi(2 * sz, 0);
     }
 
-    void update(int i, int v){
+    void update(int i, int v) {
         i += sz;
         s_tree[i] = v;
-        for (i /= 2; i >= 1; i /= 2){
+        for (i /= 2; i >= 1; i /= 2) {
             this->s_tree[i] = this->s_tree[i * 2] + this->s_tree[i * 2 + 1];
         }
     }
 
-    int sum(int k, int x, int a, int b){
-        if(x >= sz){
+    int sum(int k, int x, int a, int b) {
+        if (x >= sz) {
             return x - sz;
         }
         return k >= a && k < a + this->s_tree[x * 2]
-        ? sum(k, x*2, a,a + s_tree[x*2] - 1)
-        : sum(k, x*2 + 1, a + s_tree[x*2], b);
+               ? sum(k, x * 2, a, a + s_tree[x * 2] - 1)
+               : sum(k, x * 2 + 1, a + s_tree[x * 2], b);
     }
 
-    int sum(int k){
-        return sum(k,1,1,s_tree[1]);
+    int sum(int k) {
+        return sum(k, 1, 1, s_tree[1]);
     }
 
-    int ttl(){
+    int ttl() {
         return this->s_tree[1];
     }
 
@@ -72,17 +72,16 @@ int main() {
     tree.init(MAX);
 
     for (int i = 1; i < MAX - 1; i += 2) {
-        tree.update(i,1);
+        tree.update(i, 1);
     }
 
     int sz = tree.ttl(), j = 2;
     for (; j <= sz; j++) {
         int k = tree.sum(j);
         int i = sz - sz % k;
-        int sum = tree.sum(i);
         for (; i >= 1; i -= k) {
-            sum = tree.sum(i);
-            if (sum == k){
+            int sum = tree.sum(i);
+            if (sum == k) {
                 break;
             }
             tree.update(sum, 0);
@@ -95,13 +94,14 @@ int main() {
     }
 
     int x = 0;
-    while (cin >> x){
-        if(x % 2 || !x){
+    while (cin >> x) {
+        if (x % 2 || !x) {
             cout << x << " is not the sum of two luckies!" << endl;
         } else {
-            for (int i = x/2; i >= 1; --i) {
-                if (lucks[i] && lucks[x - i]){
-                    cout << x << " is the sum of " << i << " and " << x - i << "." << endl;
+            for (int i = x / 2; i >= 1; --i) {
+                if (lucks[i] && lucks[x - i]) {
+                    cout << x << " is the sum of " << i << " and " << x - i
+                         << "." << endl;
                     break;
                 }
             }
