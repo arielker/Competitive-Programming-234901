@@ -3,4 +3,4 @@ project(Competitive_Programming_234901)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(Competitive_Programming_234901 class4/class4qE.cpp)
+add_executable(Competitive_Programming_234901 class4/kitchencombinatorics.cpp)
