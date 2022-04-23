@@ -20,6 +20,8 @@ using namespace std;
 typedef long long ll;
 typedef unsigned long long ull;
 typedef vector<int> vi;
+typedef vector<ll> vll;
+typedef set<ll> sll;
 typedef pair<int, int> pii;
 
 /**
@@ -27,96 +29,113 @@ typedef pair<int, int> pii;
  * s,m,d - are the number of available starter dishes, main dishes, and desserts, respectively
  * n - the number of pairs of dishes that do not go well together.
  */
-int r, s, m, d, n;
 
-static inline bool find(set<pii> set, ll a, ll b) {
-    return set.find({a, b}) != set.end() || set.find({b, a}) != set.end();
+static inline bool find(set<pair<ll, ll>> set, ll a, ll b) {
+    return set.find({a, b}) != set.end();
 }
 
 int main() {
-    cin >> r >> s >> m >> d >> n;
-    vi brands(r + 1);
-    brands[0] = 0;
-    for (int i = 1; i <= r; ++i) {
-        cin >> brands[i];
-    }
-    ull MAX = pow(10,18);
-    ull res = 1;
-    vector<vector<ll>> starters(s + 1);
-    vector<vector<ll>> mains(m + 1);
-    vector<vector<ll>> deserts(d + 1);
-    set<pii> bad;
-    ///input of starters
-    for (int i = 1; i <= s; ++i) {
-        int k;
-        cin >> k;
-//        starters[i].insert(k);
-        for (int j = 1; j <= k; ++j) {
-            int f;
-            cin >> f;
-            starters[i].emplace_back(f);
+    ll r, s, m, d, n, i, j, k, current, f, sec;
+    bool check = true;
+    ull MAX = 1e18;
+
+    while (cin >> r >> s >> m >> d >> n) {
+        ull res = 1;
+        vll brands(r + 1);
+        vector<sll> food(s + m + d + 1);
+        set<pair<ll, ll>> bad;
+
+        for (i = 1; i <= r; ++i) {
+            cin >> brands[i];
         }
-    }
-    ///input of main dishes
-    for (int i = 1; i <= m; ++i) {
-        int k;
-        cin >> k;
-//        mains[i][0] = k;
-        for (int j = 1; j <= k; ++j) {
-            int f;
-            cin >> f;
-            mains[i].emplace_back(f);
+
+        for (i = 1; i <= s + m + d; ++i) {
+            cin >> k;
+            for (j = 1; j <= k; ++j) {
+                cin >> current;
+                food[i].insert(current);
+            }
         }
-    }
-    ///input of deserts
-    for (int i = 1; i <= d; ++i) {
-        ll k;
-        cin >> k;
-//        deserts[i][0] = k;
-        for (int j = 1; j <= k; ++j) {
-            ll f;
-            cin >> f;
-            deserts[i].emplace_back(f);
+
+        for (i = 1; i <= n; i++) {
+            cin >> f >> sec;
+            bad.insert({f < sec ? f : sec, f < sec ? sec : f});
         }
-    }
-    ///input of bad pairs
-    for (int i = 0; i < n; ++i) {
-        ll f, se;
-        cin >> f >> se;
-        bad.insert({f, se});
-    }
-    for (ll i = 1; i <= s; ++i) {
-        for (ll j = 1; j <= m; ++j) {
-            for (ll k = 1; k <= d; ++k) {
-                if (find(bad, i, s + j) ||
-                    find(bad, i, s + m + k) ||
-                    find(bad, s + j, s + m + k)) {
-                    continue;
-                }
-                ull temp = 1;
-                set<ll> ingredients;
-                ingredients.insert(starters[i].begin(), starters[i].end());
-                ingredients.insert(mains[j].begin(), mains[j].end());
-                ingredients.insert(deserts[k].begin(), deserts[k].end());
-                for (const auto &in: ingredients) {
-                    temp *= brands[in];
-                    if(temp > MAX){
-                        cout << "too many" << endl;
-                        return 0;
+
+        for (i = 1; i <= s && check; ++i) {
+            for (j = s + 1; j <= s + m && check; ++j) {
+                for (k = s + m + 1; k <= s + m + d; ++k) {
+                    if (find(bad, i, j) || find(bad, i, k) || find(bad, j, k)) {
+                        continue;
                     }
-                }
-                res += temp;
-                if (res - 1 > MAX){
-                    cout << "too many" << endl;
-                    return 0;
+                    ull x = 1;
+                    set<ll> ingredients = food[i];
+                    ingredients.insert(food[j].begin(), food[j].end());
+                    ingredients.insert(food[k].begin(), food[k].end());
+                    for (const auto &in: ingredients) {
+                        if (MAX / brands[in] < x) {
+                            check = false;
+                            break;
+                        } else {
+                            x *= brands[in];
+                        }
+                    }
+                    if (check) {
+                        if (MAX - x >= res - 1) {
+                            res += x;
+                        } else {
+                            check = false;
+                            break;
+                        }
+                    } else {
+                        break;
+                    }
                 }
             }
         }
+        if (res - 1 <= MAX && check) {
+            cout << res - 1 << endl;
+        } else {
+            cout << "too many" << endl;
+        }
     }
-    if (res - 1 > MAX) {
-        cout << "too many" << endl;
-    } else {
-        cout << res - 1 << endl;
-    }
-    return 0;
 }
+
+/*
+6 1 1 1 0
+2 3 1 5 3 2
+2 1 2
+3 3 4 5
+1 6
+
+    180
+
+3 2 2 1 1
+2 3 2
+1 1
+1 2
+1 2
+1 3
+1 1
+2 3
+
+    22
+
+3 1 1 1 1
+5 5 5
+3 1 2 3
+3 1 2 3
+3 1 2 3
+2 1
+
+    0
+
+10 1 1 1 0
+100 100 100 100 100 100 100 100 100 100
+4 1 2 3 4
+3 5 6 7
+3 8 9 10
+
+    too many
+
+ */
