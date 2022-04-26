@@ -9,8 +9,8 @@
 
 using namespace std;
 
-typedef pair<int,int> ii;
-typedef pair<int,ii> iii;
+typedef pair<int, int> ii;
+typedef pair<int, ii> iii;
 typedef vector<ii> vii;
 typedef vector<vii> vvii;
 typedef vector<int> vi;
@@ -28,20 +28,21 @@ const int INF = 1e9;
 // output: is g a DAG (return value), a topological ordering of g (order).
 // comment: order is valid only if g is a DAG.
 // time: O(V+E).
-bool topological_sort(const vvi& g, vi& order) {
+bool topological_sort(const vvi &g, vi &order) {
     // compute indegree of all nodes
-    vi indegree (g.size(), 0);
-    for (int v=0; v<g.size(); v++) for (int u : g[v]) indegree[u]++;
+    vi indegree(g.size(), 0);
+    for (int v = 0; v < g.size(); v++) for (int u: g[v]) indegree[u]++;
     // order sources first
     order = vector<int>();
-    for (int v=0; v<g.size(); v++) if (indegree[v] == 0) order.push_back(v);
+    for (int v = 0; v < g.size(); v++) if (indegree[v] == 0) order.push_back(v);
     // go over the ordered nodes and remove outgoing edges,
     // add new sources to the ordering
-    for (int i=0; i<order.size(); i++) for (int u : g[order[i]]) {
+    for (int i = 0; i < order.size(); i++)
+        for (int u: g[order[i]]) {
             indegree[u]--;
-            if (indegree[u]==0) order.push_back(u);
+            if (indegree[u] == 0) order.push_back(u);
         }
-    return order.size()==g.size();
+    return order.size() == g.size();
 }
 
 
@@ -51,14 +52,14 @@ bool topological_sort(const vvi& g, vi& order) {
 const int UNSEEN = -1;
 const int SEEN = 1;
 
-void KosarajuDFS(const vvi& g, int u, vi& S, vi& colorMap, int color) {
+void KosarajuDFS(const vvi &g, int u, vi &S, vi &colorMap, int color) {
     // DFS on digraph g from node u:
     // visit a node only if it is mapped to the color UNSEEN,
     // Mark all visited nodes in the color map using the given color.
     // input: digraph (g), node (v), mapping:node->color (colorMap), color (color).
     // output: DFS post-order (S), node coloring (colorMap).
     colorMap[u] = color;
-    for (auto& v : g[u])
+    for (auto &v: g[u])
         if (colorMap[v] == UNSEEN)
             KosarajuDFS(g, v, S, colorMap, color);
     S.push_back(u);
@@ -68,7 +69,7 @@ void KosarajuDFS(const vvi& g, int u, vi& S, vi& colorMap, int color) {
 // input: directed graph (g[u] contains the neighbors of u, nodes are named 0,1,...,|V|-1).
 // output: the number of SCCs (return value), a mapping from node to SCC color (components).
 // time: O(V+E).
-int findSCC(const vvi& g, vi& components) {
+int findSCC(const vvi &g, vi &components) {
     // first pass: record the `post-order' of original graph
     vi postOrder, seen;
     seen.assign(g.size(), UNSEEN);
@@ -76,12 +77,14 @@ int findSCC(const vvi& g, vi& components) {
         if (seen[i] == UNSEEN)
             KosarajuDFS(g, i, postOrder, seen, SEEN);
     // second pass: explore the SCCs based on first pass result
-    vvi reverse_g(g.size(),vi());
-    for (int u=0; u<g.size(); u++) for (int v : g[u]) reverse_g[v].push_back(u);
+    vvi reverse_g(g.size(), vi());
+    for (int u = 0; u < g.size(); u++)
+        for (int v: g[u])
+            reverse_g[v].push_back(u);
     vi dummy;
     components.assign(g.size(), UNSEEN);
     int numSCC = 0;
-    for (int i = (int)g.size()-1; i >= 0; --i)
+    for (int i = (int) g.size() - 1; i >= 0; --i)
         if (components[postOrder[i]] == UNSEEN)
             KosarajuDFS(reverse_g, postOrder[i], dummy, components, numSCC++);
     return numSCC;
@@ -91,11 +94,12 @@ int findSCC(const vvi& g, vi& components) {
 // input: directed graph (g[u] contains the neighbors of u, nodes are named 0,1,...,|V|-1).
 // output: strongly connected components graph of g (sccg).
 // time: O(V+E).
-void findSCCgraph(const vvi& g, vsi& sccg) {
+void findSCCgraph(const vvi &g, vsi &sccg) {
     vi component;
     int n = findSCC(g, component);
     sccg.assign(n, si());
-    for (int u=0; u<g.size(); u++) for (int v: g[u]) // for every edge u->v
+    for (int u = 0; u < g.size(); u++)
+        for (int v: g[u]) // for every edge u->v
             if (component[u] != component[v])
                 sccg[component[u]].insert(component[v]);
 }
@@ -107,20 +111,22 @@ void findSCCgraph(const vvi& g, vsi& sccg) {
 // input: non-negatively weighted directed graph (g[u] contains pairs (v,w) such that u->v has weight w, nodes are named 0,1,...,|V|-1), source (s).
 // output: distances from s (dist).
 // time: O(ElogV).
-void Dijkstra(const vvii& g, int s, vi& dist) {
+void Dijkstra(const vvii &g, int s, vi &dist) {
     dist = vi(g.size(), INF);
     dist[s] = 0;
     priority_queue<ii, vii, greater<ii>> q;
     q.push({0, s});
     while (!q.empty()) {
-        ii front = q.top(); q.pop();
+        ii front = q.top();
+        q.pop();
         int d = front.first, u = front.second;
-        if (d > dist[u]) continue; // We may have found a shorter way to get to u after inserting it to q.
+        if (d > dist[u])
+            continue; // We may have found a shorter way to get to u after inserting it to q.
         // In that case, we want to ignore the previous insertion to q.
-        for (ii next : g[u]) {
+        for (ii next: g[u]) {
             int v = next.first, w = next.second;
-            if (dist[u]+w < dist[v]) {
-                dist[v] = dist[u]+w;
+            if (dist[u] + w < dist[v]) {
+                dist[v] = dist[u] + w;
                 q.push({dist[v], v});
             }
         }
@@ -131,7 +137,7 @@ void Dijkstra(const vvii& g, int s, vi& dist) {
 // output: is there a negative cycle in g? (return value), the distances from s (d)
 // comment: the values in d are valid only if there is no negative cycle.
 // time: O(VE).
-bool BellmanFord(const vvii& g, int s, vi& d) {
+bool BellmanFord(const vvii &g, int s, vi &d) {
     d.assign(g.size(), INF);
     d[s] = 0;
     bool changed = false;
@@ -139,12 +145,13 @@ bool BellmanFord(const vvii& g, int s, vi& d) {
     for (int i = 0; i < g.size(); ++i) {
         changed = false;
         // go over all edges u->v with weight w
-        for (int u = 0; u < g.size(); ++u) for (ii e : g[u]) {
+        for (int u = 0; u < g.size(); ++u)
+            for (ii e: g[u]) {
                 int v = e.first;
                 int w = e.second;
                 // relax the edge
-                if (d[u] < INF && d[u]+w < d[v]) {
-                    d[v] = d[u]+w;
+                if (d[u] < INF && d[u] + w < d[v]) {
+                    d[v] = d[u] + w;
                     changed = true;
                 }
             }
@@ -156,19 +163,21 @@ bool BellmanFord(const vvii& g, int s, vi& d) {
 // input: weighted directed graph (g[u] contains pairs (v,w) such that u->v has weight w, nodes are named 0,1,...,|V|-1).
 // output: the pairwise distances (d).
 // time: O(V^3).
-void FloydWarshall(const vvii& g, vvi& d) {
+void FloydWarshall(const vvii &g, vvi &d) {
     // initialize distances according to the graph edges
     d.assign(g.size(), vi(g.size(), INF));
-    for (int u=0; u<g.size(); ++u) d[u][u] = 0;
-    for (int u=0; u<g.size(); ++u) for (ii e: g[u]) {
-            int v = e.first; int w = e.second;
-            d[u][v] = min(d[u][v],w);
+    for (int u = 0; u < g.size(); ++u) d[u][u] = 0;
+    for (int u = 0; u < g.size(); ++u)
+        for (ii e: g[u]) {
+            int v = e.first;
+            int w = e.second;
+            d[u][v] = min(d[u][v], w);
         }
     // relax distances using the Floyd-Warshall algorithm
-    for (int k=0; k<g.size(); ++k)
-        for (int u=0; u<g.size(); ++u)
-            for (int v=0; v<g.size(); ++v)
-                d[u][v] = min(d[u][v], d[u][k]+d[k][v]);
+    for (int k = 0; k < g.size(); ++k)
+        for (int u = 0; u < g.size(); ++u)
+            for (int v = 0; v < g.size(); ++v)
+                d[u][v] = min(d[u][v], d[u][k] + d[k][v]);
 }
 
 
@@ -179,19 +188,19 @@ struct unionfind {
     vector<int> rank;
     vector<int> parent;
 
-    unionfind (int size) {
-        rank=vector<int>(size,0);
-        parent=vector<int>(size);
-        for(int i=0;i<size;i++) parent[i]=i;
+    unionfind(int size) {
+        rank = vector<int>(size, 0);
+        parent = vector<int>(size);
+        for (int i = 0; i < size; i++) parent[i] = i;
     }
 
     int find(int x) {
-        int tmp=x;
-        while(x!=parent[x]) x=parent[x];
-        while(tmp!=x) {
-            int remember=parent[tmp];
-            parent[tmp]=x;
-            tmp=remember;
+        int tmp = x;
+        while (x != parent[x]) x = parent[x];
+        while (tmp != x) {
+            int remember = parent[tmp];
+            parent[tmp] = x;
+            tmp = remember;
         }
         return x;
     }
@@ -199,10 +208,10 @@ struct unionfind {
     void unite(int p, int q) {
         p = find(p);
         q = find(q);
-        if(q==p) return;
-        if(rank[p] < rank[q]) parent[p] = q;
+        if (q == p) return;
+        if (rank[p] < rank[q]) parent[p] = q;
         else parent[q] = p;
-        if(rank[p] == rank[q]) rank[p]++;
+        if (rank[p] == rank[q]) rank[p]++;
     }
 };
 
@@ -211,12 +220,13 @@ struct unionfind {
 //        number of nodes (n), all nodes are between 0 and n-1.
 // output: weight of a minimum spanning tree.
 // time: O(ElogV).
-int Kruskal(vector<iii>& edges, int n) {
+int Kruskal(vector<iii> &edges, int n) {
     sort(edges.begin(), edges.end());
     int mst_cost = 0;
     unionfind components(n);
-    for (iii e : edges) {
-        if (components.find(e.second.first) != components.find(e.second.second)) {
+    for (iii e: edges) {
+        if (components.find(e.second.first) !=
+            components.find(e.second.second)) {
             mst_cost += e.first;
             components.unite(e.second.first, e.second.second);
         }
@@ -228,7 +238,7 @@ int Kruskal(vector<iii>& edges, int n) {
 /********** Max Flow **********/
 
 
-int augment(vvi& res, int s, int t, const vi& p, int minEdge) {
+int augment(vvi &res, int s, int t, const vi &p, int minEdge) {
     // traverse the path from s to t according to p.
     // change the residuals on this path according to the min edge weight along this path.
     // return the amount of flow that was added.
@@ -247,11 +257,11 @@ int augment(vvi& res, int s, int t, const vi& p, int minEdge) {
 //        edges v1->v2 of the form (weight,(v1,v2)), source (s) and target (t).
 // output: max flow from s to t over the edges.
 // time: O(VE^2) and O(EF).
-int EdmondsKarp (int n, vector<iii>& edges, int s, int t) {
+int EdmondsKarp(int n, vector<iii> &edges, int s, int t) {
     // initialise adjacenty list and residuals adjacency matrix
-    vvi res(n,vi(n,0));
+    vvi res(n, vi(n, 0));
     vvi adj(n);
-    for (iii e : edges) {
+    for (iii e: edges) {
         res[e.second.first][e.second.second] += e.first;
         adj[e.second.first].push_back(e.second.second);
         adj[e.second.second].push_back(e.second.first);
@@ -266,9 +276,11 @@ int EdmondsKarp (int n, vector<iii>& edges, int s, int t) {
         q.push(s);
         vi p(res.size(), -1);
         while (!q.empty()) {
-            int u = q.front(); q.pop();
+            int u = q.front();
+            q.pop();
             if (u == t) break;
-            for (int v : adj[u]) if (res[u][v] > 0 && dist[v] == INF) {
+            for (int v: adj[u])
+                if (res[u][v] > 0 && dist[v] == INF) {
                     dist[v] = dist[u] + 1;
                     q.push(v);
                     p[v] = u;
