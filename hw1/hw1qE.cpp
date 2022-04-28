@@ -18,9 +18,11 @@
 using namespace std;
 
 typedef long long ll;
+typedef long long int lli;
 typedef unsigned long long ull;
 typedef vector<int> vi;
 typedef vector<ll> vll;
+typedef vector<lli> vlli;
 typedef set<ll> sll;
 typedef pair<int, int> pii;
 typedef pair<int, int> ii;
@@ -33,14 +35,14 @@ typedef set<int> si;
 typedef vector<si> vsi;
 
 constexpr int MAX = 1000;
-vll sol(MAX, 0);
-vll matrix(MAX, 0);
+vlli sol(MAX, 0);
+vlli matrix(MAX, 0);
 
 
-void compute(int n, ll mod) {
-    vll save(MAX, 0);
+void compute(int n, lli mod) {
+    vlli save(MAX, 0);
     for (int i = 0; i < n; ++i) {
-        ll sum = 0;
+        lli sum = 0;
         for (int j = 0; j <= i; ++j) {
             sum += matrix[j] * sol[i - j];
         }
@@ -54,10 +56,10 @@ void compute(int n, ll mod) {
     }
 }
 
-void adjust(int n, ll mod) {
-    vll save(MAX, 0);
+void adjust(int n, lli mod) {
+    vlli save(MAX, 0);
     for (int i = 0; i < n; ++i) {
-        ll sum = 0;
+        lli sum = 0;
         for (int j = 0; j <= i; ++j) {
             sum += matrix[j] * matrix[i - j];
         }
@@ -75,11 +77,12 @@ int main() {
     int t;
     cin >> t;
     while (t--) {
-        matrix.clear();
-        ll s;
-        int n, l, r, x;
+        for (auto &item: matrix) {
+            item = 0;
+        }
+        int n, l, r, x, s;
         cin >> n >> s >> l >> r >> x;
-        ll mod = 1;
+        lli mod = 1;
         for (int i = 0; i < x; ++i) {
             mod *= 10;
         }
@@ -100,9 +103,9 @@ int main() {
         for (int i = 0; i < n; ++i) {
             if (n - 1 == i) {
                 cout << sol[i] << endl;
-                break;
+            } else {
+                cout << sol[i] << " ";
             }
-            cout << sol[i] << " ";
         }
     }
     return 0;
