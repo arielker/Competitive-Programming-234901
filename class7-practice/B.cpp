@@ -112,17 +112,19 @@ public:
 };
 
 
-char T[MAX_N];
-char P[MAX_N];
-char LRS_ans[MAX_N];
-char LCS_ans[MAX_N];
+string T;
+string P;
+string LRS_ans;
+string LCS_ans;
 
 int main() {
-    while (scanf("%s", T)){
-        int n = (int) strlen(T);                   // count n
+    while (getline(cin, T)){
+        int n = (int) (T.size());                   // count n
         T[n++] = '$';                                  // add terminating symbol
-        SuffixArray S(T, n);                           // construct SA+LCP
+        SuffixArray S(&T[0], n);                           // construct SA+LCP
 
     }
     return 0;
 }
+
+//THE OTHER MATHEMATICS NOT HERE
