@@ -39,7 +39,7 @@ typedef vector<si> vsi;
 struct PT {
     double x, y;
 
-    explicit PT(double d = 0.0, double d1 = 0.0): x(d), y(d1){}
+    explicit PT(double d = 0.0, double d1 = 0.0) : x(d), y(d1) {}
 
 
     // compare the lexicographic order of 2 points
@@ -127,7 +127,7 @@ vector<PT> convex_hull(vector<PT> &Points) {
     return CH;
 }
 
-double area(const vector<PT>& points) {
+double area(const vector<PT> &points) {
     double area = 0.0;
     int x = static_cast<int>(points.size() - 1);
     for (int i = 0; i < points.size(); ++i) {
@@ -139,8 +139,8 @@ double area(const vector<PT>& points) {
 
 int main() {
     int n;
-    while (cin >> n){
-        if (0 == n){
+    while (cin >> n) {
+        if (0 == n) {
             return 0;
         }
         vector<PT> points(n, PT());
