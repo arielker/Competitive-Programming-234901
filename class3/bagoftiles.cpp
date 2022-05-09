@@ -42,7 +42,8 @@ int getFactorial(int n, int k) {
 
     for (int i = 1; i <= n; i++) {
         for (int j = min(i, k); j > 0; j--) {
-            factorial[j] = factorial[j] + factorial[j - 1]; // Calculate current factorial based on the previous pascal triangle row
+            factorial[j] = factorial[j] + factorial[j -
+                                                    1]; // Calculate current factorial based on the previous pascal triangle row
         }
     }
     return factorial[k];
@@ -69,7 +70,7 @@ void countSubArray(int tiles[], int n, int m, int sub[][MAXSUM], int offset) {
 // Implementation of subset sum algorithm using meet in the middle technique
 pii countCombinations(int tiles[], int t, int n, int m) {
 
-    if ((n == 0 && t ==0) || m == 0) {
+    if ((n == 0 && t == 0) || m == 0) {
         return make_pair(1, 0);
     } else if (n == 0 && t > 0) {
         return make_pair(0, 1);
@@ -78,8 +79,8 @@ pii countCombinations(int tiles[], int t, int n, int m) {
     // Calculate partial sums of left and right subarray
     memset(leftt, 0, sizeof(leftt));
     memset(rightt, 0, sizeof(rightt));
-    countSubArray(tiles, n, m/2, leftt, 0);
-    countSubArray(tiles, n, (m - m/2), rightt, m/2);
+    countSubArray(tiles, n, m / 2, leftt, 0);
+    countSubArray(tiles, n, (m - m / 2), rightt, m / 2);
 
 
     // Calculate number of partial sums that lead to k-subset sum = t
@@ -89,9 +90,11 @@ pii countCombinations(int tiles[], int t, int n, int m) {
 
         // sort(right[n - i].begin(), right[n - i].end()); // Sort right subarray containing n - i sized subset sums
 
-        for (int j = 1; j <= t; j++) { // For each partial sum in left subarray of size i
+        for (int j = 1;
+             j <= t; j++) { // For each partial sum in left subarray of size i
             curr = leftt[i][j]; // Current number of partial sums equals to i
-            win += curr * rightt[n - i][t - j]; // Match with total sum = t and total
+            win += curr *
+                   rightt[n - i][t - j]; // Match with total sum = t and total
         }
     }
 
@@ -116,7 +119,8 @@ int main() {
 
         p = countCombinations(tiles, t, n, m);
 
-        cout << "Game " << x << " -- " << p.first << " : " << getFactorial(m,n) - p.first << endl;
+        cout << "Game " << x << " -- " << p.first << " : "
+             << getFactorial(m, n) - p.first << endl;
     }
 }
 
