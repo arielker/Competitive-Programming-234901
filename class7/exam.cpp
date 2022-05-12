@@ -33,6 +33,44 @@ typedef set<int> si;
 typedef vector<si> vsi;
 
 int main() {
+    string test0, test1;
+    int k;
+    cin >> k >> test0 >> test1;
+    ull testSize = test0.size();
+    int same = 0;
+
+    for (int i = 0; i < testSize; i++) {
+        if(test0[i] == test1[i]){
+            same++;
+        }
+    }
+
+    ull diff = testSize - same;
+
+    if (k < same) {
+        cout << k + diff << endl;
+        return 0;
+    }
+
+    ull he_smarter = k - same;
+    ull im_smarter = testSize - he_smarter - k;
+    ///intersect + smarter
+    cout << im_smarter + k << endl;
 
     return 0;
 }
+
+/*
+3
+FTFFF
+TFTTT
+
+    2
+
+6
+TTFTFFTFTF
+TTTTFFTTTT
+
+    9
+
+ */

@@ -33,6 +33,23 @@ typedef set<int> si;
 typedef vector<si> vsi;
 
 int main(){
+    int testcases;
+    cin >> testcases;
+    while (testcases--){
+        int n, m;
+        cin >> n >> m;
 
+    }
     return 0;
 }
+
+/*
+2
+4 0
+3 2
+1 2
+1 3
+
+    4
+    2
+ */
