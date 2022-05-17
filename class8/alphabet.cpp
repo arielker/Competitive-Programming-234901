@@ -33,6 +33,22 @@ typedef set<int> si;
 typedef vector<si> vsi;
 
 int main() {
-
+    string s;
+    while (cin >> s) {
+        if (1 == s.size()) {
+            cout << "25" << endl;
+            continue;
+        }
+        int length = s.size();
+        vi lis(length, 1);
+        for (int i = 0; i < length; ++i) {
+            for (int j = 0; j < i; ++j) {
+                if (s[i] > s[j]){
+                    lis[i] = max(lis[i], lis[j] + 1);
+                }
+            }
+        }
+        cout << 26 - *max_element(lis.begin(), lis.end()) << endl;
+    }
     return 0;
 }
