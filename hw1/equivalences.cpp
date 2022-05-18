@@ -89,7 +89,6 @@ int findSCCgraph(const vvi &g, vsi &sccg) {
 }
 
 
-
 int main() {
     int testcases;
     cin >> testcases;
@@ -104,15 +103,16 @@ int main() {
         }
         vsi sccg{};
         int sccs = findSCCgraph(graph, sccg);
-        if (1 == sccs){
+        if (1 == sccs) {
             cout << "0" << endl;
-            return 0;
+            continue;
         }
 
         vi in_degree(sccs, 0);
         vi out_degree(sccs, 0);
         for (int i = 0; i < sccs; ++i) {
-            for (const auto& v: sccg[i]) {
+            for (const auto &v: sccg[i]) {
+                ///for every edge i -> v
                 out_degree[i] = 1;
                 in_degree[v] = 1;
             }

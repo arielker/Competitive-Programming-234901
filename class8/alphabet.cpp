@@ -43,7 +43,7 @@ int main() {
         vi lis(length, 1);
         for (int i = 0; i < length; ++i) {
             for (int j = 0; j < i; ++j) {
-                if (s[i] > s[j]){
+                if (s[i] > s[j]) {
                     lis[i] = max(lis[i], lis[j] + 1);
                 }
             }
