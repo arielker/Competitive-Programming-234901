@@ -375,7 +375,7 @@ int main() {
                     points.emplace_back(big_lanterns[j]);
                     points.emplace_back(big_lanterns[k]);
                     points.emplace_back(big_lanterns[m]);
-                    if (pointOnPolygon(p, points)){
+                    if (pointOnPolygon(p, points)) {
                         count++;
                         check = true;
                         break;
