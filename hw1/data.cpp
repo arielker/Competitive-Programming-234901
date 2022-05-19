@@ -174,15 +174,13 @@ vi subsetPrices(int n, const vi &numbers, const vector<bool> &primes) {
     int count = pow(2, n);
     vi prices;
     for (int i = 0; i < count; ++i) {
-        vi current_subset;
+        int accumulate = 0;
         for (int j = 0; j < n; ++j) {
             if ((i & (1 << j)) != 0) { //found this code online
-                current_subset.emplace_back(numbers[j]);
+                accumulate += numbers[j];
             }
         }
-        int x = getDistinctPrimesOfSum(
-                accumulate(current_subset.begin(), current_subset.end(), 0),
-                primes);
+        int x = getDistinctPrimesOfSum(accumulate, primes);
         prices.emplace_back(x);
     }
     return prices;
