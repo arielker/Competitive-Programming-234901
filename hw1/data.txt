@@ -1,0 +1,22 @@
+We first calculate all prime numbers up to 14,000 using the class introduced sieve alg.
+
+Then, for each subset of the input -  S1, ..., SN (at most 2^N subsets),
+We calculate the number of distinct prime factors of the subset's sum and save
+values in a vector.
+
+Next, we use dynamic programing - we build a vector dp of size 2^N where the ith
+cell is defined as the max revenue achieved by only using numbers from the ith subset.
+The ith subset is actually the ith binary vector of size N, lexicographically,
+such that if the jth place in the vector is turned on, then we take Sj.
+
+dp[i] = max over all subsets j of i -> (subset revenue[j] + dp[i - j])
+the subset revenue has already been calculated above, and we compute DP function
+from left to right.
+
+Finally, we return the value at dp[2^N] which is the max revenue achieved from all
+input numbers.
+
+Time complex.
+sieve - O(14,000 * sqrt(14,000)).
+subset revenue vector - O(2^N * sqrt(14,000))
+DP function - O(X * 2^N) where X is the amount of subsets that each set has at every iteration.
