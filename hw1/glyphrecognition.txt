@@ -1,0 +1,33 @@
+Notice that the relation mentioned in the problem is equivalent to the relation
+between -
+the maximal apothem of the k-gon not containing any point
+and
+the minimal apothem of the k-gon containing all points,
+squared.
+It's implied from geometry rules.
+
+Fix a value of k and let p be one of the points.
+Let rk(p) be the circumradius of the k-gon that has p on its perimeter.
+we compute each value from trigonometry:
+    Let (r, a) be the polar coordinates of p
+    using rotational symmetry we can assume 0 <= a <= 2*pi/k.
+    Then, rk(p) = r * (cos(a-pi/k) / cos(pi/k)).
+
+We then sort all these rk(p)'s.
+
+With all the rk(p) found, the answer can be computed with two simple loops.
+Iterating over all possible k values from 3 to 8, each time in the end we save best score and the relevant k.
+for every k -
+    omega = pi / k
+    theta = 2 * omega
+    angle = theta
+        for each (r,a) and while a <= angle:
+        the apothem for each point equals r * cos(a + omega - angle)
+    and we add 'theta' each time to 'angle' - (angle += theta).
+pretty dirty geometry t.b.h. but luckily I'm a matriculation math tutor for 5 points :).
+
+Time complexity:
+- getting input and computing polar coords for each point: O(n).
+- sort: O(n).
+- 2 main loops: O(33 * n)
+    3 + 4 + 5 + 6 + 7 + 8 = 33.
