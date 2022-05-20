@@ -1,0 +1,27 @@
+We build a graph where we represent each statement as a vertex and an edge a -> b
+states that statement 'a' implies statement 'b'.
+We may notice that after constructing such directed graph, we look for the minimum number
+of edges to add to this graph to make it strongly connected.
+If the aforementioned graph is strongly connected, meaning for every pair of vertices
+u,v exists a path u .. -> .. v AND v .. -> .. u, meaning every statement implies
+all other statements and vice versa.
+
+For a Strongly Connected Graph, each vertex must have an in-degree and an out-degree of at least 1.
+Therefore, in order to make a graph strongly connected, each vertex must have an incoming edge and an outgoing edge.
+The maximum number of incoming edges and the outgoing edges required
+to make the graph strongly connected is the minimum edges required to make it strongly connected.
+We follow the steps below to solve the problem:
+1. Construct a graph G(V,E) as described above.
+2. Find the G_SCC of G.
+3. Find the count of in-degrees and out-degrees of each SCC. (If the in-degree or
+out-degree of a vertex is greater than 1, then we consider it as only 1).
+4. Count the total in-degree and out-degree of the G_SCC.
+5. The minimum number of edges required to make the graph strongly connected
+is then given by max(N - totalInDegree, N - totalOutDegree).
+
+Time complexity:
+1. O(n + m).
+2. O(n + m).
+3. O(n).
+4. O(n).
+5. O(1).
