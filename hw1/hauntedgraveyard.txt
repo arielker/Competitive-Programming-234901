@@ -1,0 +1,17 @@
+We build a weighted directed graph where each vertex is a hole of u = (x,y)
+and an edge e: (u -> v) means we can pass from u to v, its weight w(e) equals to
+the time it takes to cross from u to v, according to the input.
+A hole containing a grave has no in/out edges.
+A haunted hole has only one outer edge.
+All other edges have at most 4 in/out edges according to their at the graveyard.
+
+Having constructed the graph G, we are basically interested to find the shortest path
+from (0,0) to (w-1, h-1), considering the fact that we might have a negative cycle in our graph.
+For this reason, we run Bellman-Ford on G and return the distance from (0,0) to
+(w-1, h-1) if G doesn't contain a negative cycle and the distance value is valid.
+
+Time complexity:
+    V = O(w*h).
+    E = O(4*w*h) = O(w*h).
+1. Getting input and G construction - O(V + E).
+2. Bellman-Ford - O(VE).
