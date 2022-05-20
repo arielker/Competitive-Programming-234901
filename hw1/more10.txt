@@ -1,0 +1,21 @@
+We use a uf for all pairs of strings (statements).
+for every statement 'a is b', we union(a,b).
+for every statement 'a not b', we simply save the pair a,b in a 'negs' vector.
+plus, every word of a statement is saved apart in a set containing all strings.
+
+then we iterate over all the strings of the set and union every string with its
+possible 3 rhyming suffixes (according to the question, that's Marten's theorem...).
+If 2 strings rhyme, they have a common suffix, so these strings will be at some point
+in the same set in the uf.
+
+After that we go over all the negative statements of the vector 'negs' - "a not b",
+and for each if find(a) equals find(b) then we found a contradiction, so we print it and finish.
+If we finished going over all the negative statements, no contradiction was found,
+we simply print a positive result.
+
+Time complexity:
+    N <= 100,000 (number of statements)
+    MAX = 100,000 * 4 + 2, (based on the constraints mentioned in the problem).
+1. UF construction - O(MAX * log*n)
+2. Unions implied from Marten's theorem - O(MAX * log*n).
+3. finding contradictions - O(MAX * log*n).
