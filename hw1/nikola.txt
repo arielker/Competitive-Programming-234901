@@ -1,0 +1,28 @@
+We save the fees in a vector, and then we construct and use 2 main data structures.
+
+1. square -> (jump size -> fee)
+a vector of int vectors called 'dist' where each cell represents a square, and
+for each square we save a vector of all possible jump sizes (it's notable that
+max jump size is N, since a jump size bigger than N surely results in 'out of bounds'
+error) in which the value is the fee paid to reach square x with a jump size j.
+2. (current paid fee, (square, jump size))
+a priority queue where every element is of the form seen above, initialized with
+the base cases. A priority queue is a container adaptor that provides constant
+time lookup of the largest (by default) element, at the expense of logarithmic
+insertion and extraction.
+
+for every element in the queue we check all 2 possibilities for the next move,
+and if the next move is inbounds, and we haven't visited the next square yet, then
+we update the relevant place in 'dist' and push the next square to the priority queue
+accordingly with right jump size and fee.
+Since in a priority queue the elements are arranged such that the biggest element is first,
+we push to the queue the fee with a negative sign (-). That way we greedily check
+the low fees first at every iteration to secure minimal fee paths to every square reached.
+
+In the end, as soon as we get to the last square, we can be assured that the fee
+reached to it is minimal from our greedy approach, we print it and return.
+
+Time Complexity:
+1. Input processing (bottleneck from 'dist' init.) - O(n^2).
+2. lowest fee computation - worst case scenario we check all squares with all possible jump
+sizes to reach the squares, before actually reaching the last square - O(n^2 log(n)).
