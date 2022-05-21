@@ -1,0 +1,32 @@
+pretty nasty question t.b.h
+First notice that an odd number cannot be the sum of two luckies since all even
+numbers are not lucky.
+secondly we noticed that every even number in some way is the sum of 2 luckies
+(experimented it by pen and paper).
+
+Our main data structure is a full binary tree with extra info on the nodes
+of the tree - the amount of numbers in the subtree.
+we define MAX = 2000001, according to the question constraints, so our tree is
+of size 2*MAX. the tree is basically a vector of size 2*MAX where the numbers themselves
+are stored in the 2nd half of the vector and the metadata in the first half.
+insertion and find operations are standard operations of O(log(n)), as known
+from previous courses.
+
+firstly, we insert all odd numbers <=MAX to te tree.
+then, we start deleting all non-lucky numbers from the tree, as follows:
+we find the j'th number s.t. every j'th number needs to be deleted from the tree,
+and if the tree contains X numbers in total then (X - X%j)'th number is the last serial number in the tree to be deleted.
+we delete every serial k'th number according to the definition starting from the last one, excluding the first serial number - k.
+
+then we initialize a vector with the size same as the total luckies in the tree,
+s.t. the i'th place in the vector is 1 iff i is a lucky number.
+
+for every input x we get if x is odd or x = 0 we return "false", else, starting
+from i = x/2 we check in the vector if i AND x-i are luckies, where each time we decrement i by 1.
+this way we promise minimality of the 2 luckies.
+
+Time complexity:
+1. tree init - O(MAX log(n)).
+2. deletion of all non luckies - O(MAX 3*log(n)) = O(MAX log(n)).
+3. lukies vector init. - O(MAX log(n)).
+4. finding the sum - O(1).

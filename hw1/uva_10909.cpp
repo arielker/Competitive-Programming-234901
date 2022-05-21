@@ -40,6 +40,7 @@ struct tree {
     }
 
     void update(int i, int v) {
+        ///insert to 2nd half of the vector and update all ancestors
         i += sz;
         s_tree[i] = v;
         for (i /= 2; i >= 1; i /= 2) {
@@ -48,6 +49,7 @@ struct tree {
     }
 
     int sum(int k, int x, int a, int b) {
+        ///traverse the binary tree until you reach the 2nd half of the vector
         if (x >= sz) {
             return x - sz;
         }
@@ -57,10 +59,13 @@ struct tree {
     }
 
     int sum(int k) {
+        ///find k starting from the first element in tree where the bounds
+        ///range from 1 to s_tree[1] (total numbers in the tree)
         return sum(k, 1, 1, s_tree[1]);
     }
 
     int ttl() {
+        /// "tree total luckies"
         return this->s_tree[1];
     }
 
@@ -71,17 +76,23 @@ int main() {
     tree tree;
     tree.init(MAX);
 
+    ///insert all odd numbers
     for (int i = 1; i < MAX - 1; i += 2) {
         tree.update(i, 1);
     }
 
     int sz = tree.ttl(), j = 2;
     for (; j <= sz; j++) {
+        ///find j'th serial number according to which every j'th number needs to be deleted
+        ///we call that number - k.
         int k = tree.sum(j);
+        ///find the last number to be deleted
         int i = sz - sz % k;
         for (; i >= 1; i -= k) {
+            ///start deleting backwards all numbers
             int sum = tree.sum(i);
             if (sum == k) {
+                ///excluding k itself
                 break;
             }
             tree.update(sum, 0);
