@@ -1,0 +1,15 @@
+The maximum value of the single-peak function is obtained by three points.
+Hence, we may conduct a ternary search over all contestants speeds where
+the lengths of the cycling and running courses change accordingly, to find optimal
+running/cycling lengths to suit the cheater's speed - as much time difference as possible.
+
+Set the first part length to x, the length of the second part is l-x,
+time(x) = x/v + (l-x)/u.
+we may notice that the above function is a single-peak function, so ternary search
+is valid in this case.
+
+Time complexity:
+    n - number of contestants.
+1. input processing - O(n).
+2. ternary search where in each iteration we try to maximize the time difference - O(n log3(n)).
+3. finding maximal difference in the end - O(n).
