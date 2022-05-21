@@ -1,0 +1,33 @@
+Matrix mul.
+we wiil use the following N X N matrix:
+
+1 R 0 0 ... 0 0 L
+L 1 R 0 0 ... 0 0
+0 L 1 R 0 0 ... 0
+.	  .
+.	    .
+.	      .
+0 ... 0 0 L 1 R 0
+0 0 ... 0 0 L 1 R
+R 0 0 ... 0 0 L 1
+
+We insert the initial values of the N number inside a column vector x.
+
+M*x is a vector with the values of the first iteration:
+i.e. multiplying the i'th row of M with x, the i'th cell (x'(i)) result vector equals:
+x'(i) <- x(i-1) * L + x(i) * 1 + x(i+1) * R
+
+result vector of (M^S)*x contains the values of the N numbers after S iterations as we wanted.
+
+M is a circulant matrix, a multiplication of circulant matrices is also a circulant matrix,
+as learnt in class, it costs O(N^2).
+
+We use the fast exponentiation algorithm as seen in class.
+We need to calculate the following matrices: M^(2^0), ... , M^(2^30)
+Then multiply all matrices with respect to the binary representation of S in order to get M^S.
+we will apply mod(10^M) operation on each resulting vector after each multiplication.
+
+Time complexity:
+1. Calculating series - O(30 * N^2)
+2. Calculating M^S - O(30 * N^2)
+3. Calculating (M^S)*x - O(N^2)
