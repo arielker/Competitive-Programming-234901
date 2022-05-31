@@ -304,14 +304,13 @@ vector<point> convex_hull(vector<point> Points) {
     return CH;
 }
 
-point to_point(int x){
+point to_point(int x) {
     x--;
     return {static_cast<double>(x / 3), static_cast<double>(x % 3)};
 }
 
 int main() {
     map<int, int> pattern;
-    vi sorted_pattern = {1, 2, 3, 4, 5, 6, 7, 8, 9};
     for (int i = 0; i < 9; i++) {
         int x;
         cin >> x;
@@ -319,7 +318,7 @@ int main() {
     }
     double res = 0.0;
     for (int i = 1; i < 10; ++i) {
-        if(i == 9){
+        if (i == 9) {
             break;
         }
         res += dist(to_point(pattern[i]), to_point(pattern[i + 1]));
