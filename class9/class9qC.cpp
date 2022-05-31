@@ -34,7 +34,7 @@ typedef set<int> si;
 typedef vector<si> vsi;
 
 const int INF = 1e9;
-#define EPS = 1e-9;
+#define EPS 1e-9
 
 int main() {
 
