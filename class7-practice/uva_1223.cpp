@@ -121,13 +121,7 @@ int main() {
         s.push_back('$');
         int n = (int) s.size();
         SuffixArray suffixArray(s.c_str(), n);
-        int max = 0;
-        for (const auto &item: suffixArray.LCP) {
-            if (item > max) {
-                max = item;
-            }
-        }
-        cout << max << endl;
+        cout << *max_element(suffixArray.LCP.begin(), suffixArray.LCP.end()) << endl;
     }
     return 0;
 }
