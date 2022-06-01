@@ -42,7 +42,8 @@ private:
         int maxi = max(300, n);                      // up to 255 ASCII chars
         vi c(maxi, 0);                               // clear frequency table
         for (int i = 0; i < n; ++i)                  // count the frequency
-            ++c[i + k < n ? RA[i + k]: 0];                // of each integer rank
+            ++c[i + k < n ? RA[i + k]
+                          : 0];                // of each integer rank
         for (int i = 0, sum = 0; i < maxi; ++i) {
             int t = c[i];
             c[i] = sum;
@@ -111,20 +112,74 @@ public:
     }
 };
 
+void sa(string &s) {
+    s.push_back('$');
+    int n = (int) s.size();
+    SuffixArray S(s.c_str(), n);
 
-string T;
-string P;
-string LRS_ans;
-string LCS_ans;
+    size_t curr_size = 1;
+    while (curr_size <= n) {
+        int max = 0;
+        int curr_max = 0;
+        string r;
+        for (const auto &item: S.SA) {
+            string c = s.substr(item, curr_size);
+            if (r == c) {
+                curr_max++;
+            } else {
+                if (curr_max > max) {
+                    max = curr_max;
+                }
+                r = c;
+                curr_max = 0;
+            }
+        }
+        if (curr_max > max) {
+            max = curr_max;
+        }
+        if (0 == max) {
+            cout << endl;
+            return;
+        }
+        cout << max + 1 << endl;
+        curr_size++;
+    }
+}
+
+void remove_space(string &s) {
+    string string1;
+    for (const auto &item: s) {
+        if (item != ' ') {
+            string1.push_back(item);
+        }
+    }
+    s = string1;
+}
 
 int main() {
-    while (getline(cin, T)){
-        int n = (int) (T.size());                   // count n
-        T[n++] = '$';                                  // add terminating symbol
-        SuffixArray S(&T[0], n);                           // construct SA+LCP
-
+    while (true) {
+        string s;
+        getline(cin, s);
+        remove_space(s);
+        if (s.empty()) {
+            break;
+        }
+        sa(s);
     }
     return 0;
 }
 
-//THE OTHER MATHEMATICS NOT HERE
+/*
+Sample Input
+    THE OTHER MATHEMATICS NOT HERE
+    AA
+
+Sample Output
+    5
+    4
+    4
+    2
+    2
+
+    2
+ */
