@@ -313,6 +313,10 @@ vector<point> convex_hull(vector<point> Points) {
     return CH;
 }
 
+int min(int a, int b){
+    return a < b ? a : b;
+}
+
 int main() {
     int n;
     while (cin >> n){
@@ -322,6 +326,16 @@ int main() {
             cin >> x >> y;
             points.emplace_back(point(x, y));
         }
+        int min_side = 200000;
+        sort(points.begin(), points.end());
+        for (int i = 0; i < n; ++i) {
+            for (int j = i + 1; j < n; ++j) {
+                if(points[j].x - points[i].x < min_side) {
+                    min_side = min(min_side, max(abs(points[i].x - points[j].x), abs(points[i].y - points[j].y)));
+                }
+            }
+        }
+        cout << min_side << endl;
     }
     return 0;
 }
