@@ -73,20 +73,20 @@ int KMP_search() {
     return count;
 }
 
-const vector<char> dna = {'A', 'G', 'C', 'T'};
 
 int main() {
+    const vector<char> dna = {'A', 'G', 'C', 'T'};
     while (cin >> KMP_pat) {
-        try {
-            stoi(KMP_pat);
-            return 0;
-        } catch (...) {}
+        if ('0' == KMP_pat[0]) {
+            break;
+        }
         cin >> KMP_str;
         KMP_init();
         int t1 = KMP_search(), t2 = 0, t3 = 0;
         set<string> type2s, type3s;
         for (int i = 0; i < KMP_pat.size(); ++i) {
             string s = KMP_pat.substr(0, i) + KMP_pat.substr(i + 1);
+//            s += i + 1 < KMP_pat.size() ? KMP_pat.substr(i + 1) : "";
             type2s.insert(s);
         }
         for (const auto &item: dna) {
