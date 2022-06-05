@@ -55,7 +55,7 @@ void KMP_init() {
 }
 
 // Search a pattern in a string
-// Assuming lps is allready initialized with KMP_init
+// Assuming lps is already initialized with KMP_init
 int KMP_search() {
     int n = KMP_str.length();
     int m = KMP_pat.length();
@@ -86,7 +86,6 @@ int main() {
         set<string> type2s, type3s;
         for (int i = 0; i < KMP_pat.size(); ++i) {
             string s = KMP_pat.substr(0, i) + KMP_pat.substr(i + 1);
-//            s += i + 1 < KMP_pat.size() ? KMP_pat.substr(i + 1) : "";
             type2s.insert(s);
         }
         for (const auto &item: dna) {
