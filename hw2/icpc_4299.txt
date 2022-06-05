@@ -1,0 +1,12 @@
+We define f(d,c) as probability of couple at distance d and cost c.
+Then the solution is the sum of all probabilities f(d,i) from i to m, inclusive.
+We can compute this function using DP where every step is defined by the sum
+of all possible costs of the previous distance, or 0 if the distance is higher than
+the cost.
+Distances between all nodes are found using Floyd-Warshall.
+
+Time complexity:
+1. Input processing - O(n).
+2. Floyd-Warshall - O(n^3).
+3. DP calculation - O(n^2 * r^2).
+4. Probabilities calculations - O(m).
