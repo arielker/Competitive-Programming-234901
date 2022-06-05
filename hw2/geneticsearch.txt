@@ -1,0 +1,13 @@
+We use the KMP algorithm we saw in class.
+From the pattern string, we construct 2 sets containing all type2's and
+type3's strings possible, and for each item in the set we call the KMP alg.
+This can be done in O(m) time since all we need is to add/delete a single char
+from the pattern every iteration.
+
+Time complexity:
+1. initial KMP for type 1 - O(n).
+2. type2 and type 3 set construction - O(m).
+3. for every item in each set, call KMP and to the count of each type,
+since at most there can be m different strings in the 3rd set, and it can be
+noticed that the 3rd set will be larger or equal to the 2nd set, this step
+will take eventually O(m*n) time.
