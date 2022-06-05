@@ -94,6 +94,7 @@ pp stripClosest(vector<point> &points, double d, const pp &pp1) {
 
 pp closest(vector<point> &points) {
     if (points.size() <= 3) {
+        ///if amount of points is less than or equal to 3, BF can be used.
         return bruteForce(points);
     }
     int mid = points.size() / 2;
