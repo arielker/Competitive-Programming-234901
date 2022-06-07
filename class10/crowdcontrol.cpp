@@ -152,7 +152,7 @@ int main() {
                 }
             }
         }
-        if (ret.empty()){
+        if (ret.empty()) {
             cout << "none" << endl;
             continue;
         }
