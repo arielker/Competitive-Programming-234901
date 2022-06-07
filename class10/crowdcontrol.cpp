@@ -42,7 +42,7 @@ struct unionfind {
     vector<int> rank;
     vector<int> parent;
 
-    unionfind(int size) {
+    explicit unionfind(int size) {
         rank = vector<int>(size, 0);
         parent = vector<int>(size);
         for (int i = 0; i < size; i++) parent[i] = i;
@@ -82,6 +82,7 @@ int Kruskal(vector<iii> &edges, int n, vvi &mst) {
         if (components.find(e.second.first) != components.find(e.second.second)) {
             mst_cost += e.first;
             mst[e.second.first].emplace_back(e.second.second);
+            mst[e.second.second].emplace_back(e.second.first);
             components.unite(e.second.first, e.second.second);
         }
     }
@@ -111,25 +112,81 @@ int main() {
     int n, m;
     while (cin >> n >> m) {
         vector<iii> edges;
+        vvii save(n);
         for (int i = 0; i < m; ++i) {
             int a, b, c;
             cin >> a >> b >> c;
             edges.emplace_back(-c, make_pair(a, b));
+            save[a].emplace_back(b, i);
+            save[b].emplace_back(a, i);
         }
         vvi mst(n, vi());
-        int k = Kruskal(edges, n, mst);
-        if (mst.size() == edges.size()) {
+        Kruskal(edges, n, mst);
+        vi d;
+        bfs(mst, 0, d);
+
+        si nodes_in_path;
+        nodes_in_path.insert(0);
+        int last_node = n - 1;
+        while (last_node != 0) {
+            nodes_in_path.insert(last_node);
+            for (int i = 0; i < mst[last_node].size(); ++i) {
+                ///lemma from Algo1 - retrieving path from 0 to n-1
+                if (d[last_node] == 1 + d[mst[last_node][i]]) {
+                    last_node = mst[last_node][i];
+                    break;
+                }
+            }
+        }
+
+        si ret;
+        for (const auto &v: nodes_in_path) {
+            for (const auto &i: save[v]) {
+                auto node = i.first;
+                auto e = i.second;
+                if (nodes_in_path.find(node) == nodes_in_path.end()) {
+                    ret.insert(e);
+                }
+                if (abs(d[v] - d[node]) != 1) {
+                    ret.insert(e);
+                }
+            }
+        }
+        if (ret.empty()){
             cout << "none" << endl;
             continue;
         }
-        vi d, x;
-        bfs(mst, 0, d);
-        bfs(mst, n - 1, x);
-        for (int i = 0; i < d.size(); ++i) {
-            if (d[n - 1] == x[i] + d[i]){
-                cout << i << " ";
-            }
+        for (const auto &item: ret) {
+            cout << item << " ";
         }
+        cout << endl;
     }
     return 0;
 }
+/*
+7 10
+0 1 800
+1 2 300
+2 3 75
+3 4 80
+4 5 50
+4 6 100
+6 1 35
+0 6 10
+0 2 120
+0 3 100
+    --- 0 2 4 6 7 8
+
+4 4
+0 1 10
+1 2 50
+0 3 30
+1 3 20
+    --- 0 3
+
+4 3
+0 1 10
+1 2 20
+2 3 30
+    --- none
+ */
