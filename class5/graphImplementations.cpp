@@ -225,8 +225,7 @@ int Kruskal(vector<iii> &edges, int n) {
     int mst_cost = 0;
     unionfind components(n);
     for (iii e: edges) {
-        if (components.find(e.second.first) !=
-            components.find(e.second.second)) {
+        if (components.find(e.second.first) != components.find(e.second.second)) {
             mst_cost += e.first;
             components.unite(e.second.first, e.second.second);
         }
