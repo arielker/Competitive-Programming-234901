@@ -36,60 +36,10 @@ typedef set<int> si;
 typedef vector<si> vsi;
 
 const int INF = 1e9;
+
+void bfs(const vector<vii> &g, int i, map<ii, int> &fixed, int ttl, map<ii, int> &flows);
+
 #define EPS 1e-9
-
-/********** Min Spanning Tree **********/
-
-
-struct unionfind {
-    vector<int> rank;
-    vector<int> parent;
-
-    unionfind(int size) {
-        rank = vector<int>(size, 0);
-        parent = vector<int>(size);
-        for (int i = 0; i < size; i++) parent[i] = i;
-    }
-
-    int find(int x) {
-        int tmp = x;
-        while (x != parent[x]) x = parent[x];
-        while (tmp != x) {
-            int remember = parent[tmp];
-            parent[tmp] = x;
-            tmp = remember;
-        }
-        return x;
-    }
-
-    void unite(int p, int q) {
-        p = find(p);
-        q = find(q);
-        if (q == p) return;
-        if (rank[p] < rank[q]) parent[p] = q;
-        else parent[q] = p;
-        if (rank[p] == rank[q]) rank[p]++;
-    }
-};
-
-
-// input: edges v1->v2 of the form (weight,(v1,v2)),
-//        number of nodes (n), all nodes are between 0 and n-1.
-// output: weight of a minimum spanning tree.
-// time: O(ElogV).
-int Kruskal(vector<iii> &edges, int n) {
-    sort(edges.begin(), edges.end());
-    int mst_cost = 0;
-    unionfind components(n);
-    for (iii e: edges) {
-        if (components.find(e.second.first) != components.find(e.second.second)) {
-            mst_cost += e.first;
-            components.unite(e.second.first, e.second.second);
-        }
-    }
-    return mst_cost;
-}
-
 
 /********** Max Flow **********/
 
@@ -149,7 +99,108 @@ int EdmondsKarp(int n, vector<iii> &edges, int s, int t) {
     return maxFlow;
 }
 
-int main() {
+int fixedFlow(int ttl, int w, int passed, int c) {
+    int x = ttl + 1 - w - passed;
+    return x < 0 ? 0 : x * c;
+}
 
+int main() {
+    int testcases;
+    cin >> testcases;
+    while (testcases--) {
+        int n;
+        cin >> n;
+        int init_location, group, time_to_live;
+        cin >> init_location >> group >> time_to_live;
+        int m;
+        cin >> m;
+        si medical_places;
+        for (int i = 0; i < m; ++i) {
+            int x;
+            cin >> x;
+            medical_places.insert(x);
+        }
+        int roads;
+        cin >> roads;
+        if (0 == roads) {
+            cout << (medical_places.find(init_location) == medical_places.end() ? 0 : group) << endl;
+            continue;
+        }
+        vector<vii> weighted_graph(n + 1);
+        map<ii, int> flows;
+        for (int i = 0; i < roads; ++i) {
+            int a, b, p, t;
+            cin >> a >> b >> p >> t;
+            auto nodes = make_pair(a, b);
+            weighted_graph[a].emplace_back(b, t);
+            flows[nodes] = p;
+        }
+        if (medical_places.find(init_location) != medical_places.end()) {
+            cout << group << endl;
+            continue;
+        }
+        map<ii, int> fixed_flows;
+        bfs(weighted_graph, init_location, fixed_flows, time_to_live, flows);
+        vector<iii> edges;
+        for (const auto &ff: fixed_flows) {
+            ii nodes = ff.first;
+            int flow = ff.second;
+            edges.emplace_back(flow, nodes);
+        }
+        for (const auto &i: medical_places) {
+            edges.emplace_back(INF, make_pair(i, 1001));
+        }
+        cout << min(group, EdmondsKarp(1002, edges, init_location, 1001)) << endl;
+    }
     return 0;
 }
+
+void bfs(const vector<vii> &g, int i, map<ii, int> &fixed, int ttl, map<ii, int> &flows) {
+    queue<int> q;
+    q.push(i);
+    vector<int> visible(g.size(), 0);
+    while (!q.empty()) {
+        int u = q.front();
+        q.pop();
+        for (const auto &p: g[u]) {
+            int v = p.first, w = p.second;
+            ii nodes = make_pair(u, v);
+            if (fixed.find(nodes) != fixed.end()) {
+                continue;
+            }
+            int flow = fixedFlow(ttl, w, visible[u], flows[nodes]);
+            visible[v] = visible[u] + 1;
+            if (flow > 0) {
+                fixed[nodes] = flow;
+                q.push(v);
+            }
+        }
+    }
+}
+/*
+2
+4
+3 8 5
+2
+2
+4
+5
+1 2 1 3
+3 2 1 4
+3 1 2 1
+1 4 1 3
+3 4 1 3
+4
+3 10 5
+2
+2
+4
+5
+1 2 1 3
+3 2 1 4
+3 1 2 1
+1 4 1 3
+3 4 1 3
+    --- 8
+        9
+ */
