@@ -148,9 +148,9 @@ int main() {
             edges.emplace_back(flow, nodes);
         }
         for (const auto &i: medical_places) {
-            edges.emplace_back(INF, make_pair(i, 1001));
+            edges.emplace_back(INF, make_pair(i, n + 1));
         }
-        cout << min(group, EdmondsKarp(1002, edges, init_location, 1001)) << endl;
+        cout << min(group, EdmondsKarp(n + 2, edges, init_location, n + 1)) << endl;
     }
     return 0;
 }
@@ -159,9 +159,12 @@ void bfs(const vector<vii> &g, int i, map<ii, int> &fixed, int ttl, map<ii, int>
     queue<int> q;
     q.push(i);
     vector<int> visible(g.size(), 0);
+    int update = q.size();
+    map<int, int> distance_updates;
     while (!q.empty()) {
         int u = q.front();
         q.pop();
+        update--;
         for (const auto &p: g[u]) {
             int v = p.first, w = p.second;
             ii nodes = make_pair(u, v);
@@ -169,11 +172,19 @@ void bfs(const vector<vii> &g, int i, map<ii, int> &fixed, int ttl, map<ii, int>
                 continue;
             }
             int flow = fixedFlow(ttl, w, visible[u], flows[nodes]);
-            visible[v] = visible[u] + 1;
             if (flow > 0) {
+                distance_updates[v] = visible[u] + 1;
                 fixed[nodes] = flow;
                 q.push(v);
             }
+        }
+        if (0 == update) {
+            for (auto &item: distance_updates) {
+                int node = item.first, d = item.second;
+                visible[node] = d;
+            }
+            distance_updates.clear();
+            update = q.size();
         }
     }
 }
