@@ -103,7 +103,7 @@ int fixedFlow(int ttl, int w, int passed, int c) {
     int x = ttl + 1 - w - passed;
     return x < 0 ? 0 : x * c;
 }
-int s;
+
 int main() {
     int testcases;
     cin >> testcases;
