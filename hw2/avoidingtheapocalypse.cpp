@@ -103,17 +103,13 @@ int fixedFlow(int ttl, int w, int passed, int c) {
     int x = ttl + 1 - w - passed;
     return x < 0 ? 0 : x * c;
 }
-
+int s;
 int main() {
     int testcases;
     cin >> testcases;
     while (testcases--) {
-        int n;
-        cin >> n;
-        int init_location, group, time_to_live;
-        cin >> init_location >> group >> time_to_live;
-        int m;
-        cin >> m;
+        int n, init_location, group, time_to_live, m;
+        cin >> n >> init_location >> group >> time_to_live >> m;
         si medical_places;
         for (int i = 0; i < m; ++i) {
             int x;
@@ -148,9 +144,9 @@ int main() {
             edges.emplace_back(flow, nodes);
         }
         for (const auto &i: medical_places) {
-            edges.emplace_back(INF, make_pair(i, n + 1));
+            edges.emplace_back(INF, make_pair(i, 0));
         }
-        cout << min(group, EdmondsKarp(n + 2, edges, init_location, n + 1)) << endl;
+        cout << min(group, EdmondsKarp(n + 1, edges, init_location, 0)) << endl;
     }
     return 0;
 }
@@ -158,9 +154,7 @@ int main() {
 void bfs(const vector<vii> &g, int i, map<ii, int> &fixed, int ttl, map<ii, int> &flows) {
     queue<int> q;
     q.push(i);
-    vector<int> visible(g.size(), 0);
-    int update = q.size();
-    map<int, int> distance_updates;
+    int update = q.size(), layer = 0;
     while (!q.empty()) {
         int u = q.front();
         q.pop();
@@ -171,19 +165,14 @@ void bfs(const vector<vii> &g, int i, map<ii, int> &fixed, int ttl, map<ii, int>
             if (fixed.find(nodes) != fixed.end()) {
                 continue;
             }
-            int flow = fixedFlow(ttl, w, visible[u], flows[nodes]);
+            int flow = fixedFlow(ttl, w, layer, flows[nodes]);
             if (flow > 0) {
-                distance_updates[v] = visible[u] + 1;
                 fixed[nodes] = flow;
                 q.push(v);
             }
         }
         if (0 == update) {
-            for (auto &item: distance_updates) {
-                int node = item.first, d = item.second;
-                visible[node] = d;
-            }
-            distance_updates.clear();
+            layer++;
             update = q.size();
         }
     }
