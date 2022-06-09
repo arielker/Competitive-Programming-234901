@@ -144,9 +144,10 @@ int main() {
             edges.emplace_back(flow, nodes);
         }
         for (const auto &i: medical_places) {
-            edges.emplace_back(INF, make_pair(i, 0));
+            edges.emplace_back(INF, make_pair(i, n + 1));
         }
-        cout << min(group, EdmondsKarp(n + 1, edges, init_location, 0)) << endl;
+        edges.emplace_back(group, make_pair(0, init_location));
+        cout << EdmondsKarp(n + 2, edges, 0, n + 1) << endl;
     }
     return 0;
 }
