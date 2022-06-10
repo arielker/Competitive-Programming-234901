@@ -96,25 +96,21 @@ int EdmondsKarp(int n, vector<iii> &edges, int s, int t) {
     return maxFlow;
 }
 
-static inline int c2i(char a) {
-    return a - 'A' + 1;
-}
-
 int main() {
     int s, r, f, t, source = 0, target = 1;
     while (cin >> s >> r >> f >> t) {
         int node_id = 2;
         vector<iii> edges;
-        map<char, int> state_to_ids;
+        map<string, int> state_to_ids;
         for (int i = 0; i < r; ++i) {
-            char a;
+            string a;
             cin >> a;
             state_to_ids[a] = node_id;
             edges.emplace_back(1, make_pair(source, node_id));
             node_id++;
         }
         for (int i = 0; i < f; ++i) {
-            char a;
+            string a;
             cin >> a;
             state_to_ids[a] = node_id;
             edges.emplace_back(1, make_pair(node_id, target));
@@ -126,7 +122,7 @@ int main() {
             int to_id = node_id++, from_id = node_id++;
             edges.emplace_back(1, make_pair(to_id, from_id));
             for (int j = 0; j < n; ++j) {
-                char a;
+                string a;
                 cin >> a;
                 if (state_to_ids.find(a) == state_to_ids.end()) {
                     state_to_ids[a] = node_id++;
