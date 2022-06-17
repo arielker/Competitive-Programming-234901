@@ -1,0 +1,20 @@
+We created a new flow graph:
+we duplicated every vertex s (total time) times,
+such that for every vertex v we created the vertices v + i * n for every timestamp.
+
+Then, for each edge (u,v) with capacity p and time t, we added an edge
+u + j * n -> v + (j + t) * n for each timestamp.
+In other words, we "let" p  people walk from edge u in timestamp j to edge v
+in timestamp j + t (the time it takes to travel on this edge).
+
+To complete the flow graph, we created a source vertex that connects
+to the initial vertex i at timestamp 0 with capacity g, and connected all
+medical facilities at any timestamp to a target vertex with INF capacity.
+
+To allow "waiting" at a place,
+we connected any vertex s.t. v + i * n -> v + (i + 1 * n) with INF capacity.
+The required answer is exactly the max-flow of this graph, so we run EK on the graph.
+
+Time complexity
+    the bottleneck is EK - O(VE^2),
+EK = O((s * n)* (s * m)^2) = O(s^3 * n * m)
