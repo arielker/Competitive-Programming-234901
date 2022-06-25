@@ -1,0 +1,15 @@
+For every number we check if it's a prime number.
+if it's a prime number then we start iterating over all its digits according to
+the formula, and we save a 'cache' representing all numbers observed already in
+the algorithm.
+If the same number has already occurred, then we may return a false answer
+since we closed a 'loop' and it's obvious the number is not a happy prime.
+We also save a list of the first 50 happy primes for convenience and complexity
+optimization. As soon as we reach 1 or a number on the set, we return true.
+
+Time complexity:
+    1. isPrime - O(sqrt(n))
+    2. algorithm - upper bound is probably all possible sums up to (1 ... n - 1)
+                   where every step takes approx.** O(1) - overall O(n)
+
+** neglecting the length of n, else its O(d) where d is the length of n at every iteration.
