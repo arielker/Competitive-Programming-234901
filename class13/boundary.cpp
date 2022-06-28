@@ -68,23 +68,24 @@ vector<ll> int_tokenizer(const string &sentence) {
 
 int main() {
     int T;
-    scanf("%d", &T);
+    cin >> T;
     while (T--) {
         int n, m;
-        scanf("%d%d", &n, &m);
+        cin >> n >> m;
         vector<int> R(m), W(m);
         int r = 0, w = 0;
         for (int i = 0; i < m; i++) {
-            scanf("%d%d", &R[i], &W[i]);
+            cin >> R[i] >> W[i];
             r = max(r, R[i]);
             w = max(w, W[i]);
         }
         if (r + w > n) {
-            puts("IMPOSSIBLE");
+            cout << "IMPOSSIBLE" << endl;
         } else {
-            for (int i = 0; i < r; i++) printf("R");
-            for (int i = 0; i < n - r; i++) printf("W");
-            puts("");
+            for (int i = 0; i < r; i++)
+                cout << "R" << endl;
+            for (int i = 0; i < n - r; i++)
+                cout << "W" << endl;
         }
     }
 }
