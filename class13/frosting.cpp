@@ -46,38 +46,38 @@ const int INF = 1e9;
 #define EPS 1e-9
 
 int main() {
-    ll N, M;
-    cin >> N >> M;
+    ll n;
+    cin >> n;
 
-    vvll P(N + 1, vll(M + 1, 0));
-    for (int i = 1; i <= N; ++i) {
-        for (int j = 1; j <= M; ++j) {
-            cin >> P[i][j];
-        }
+    ll colors[3] = {0}, values[3] = {0};
+    for (int i = 0; i < n; ++i) {
+        ll x;
+        cin >> x;
+        values[i % 3] += x;
     }
 
+    for (int i = 0; i < n; ++i) {
+        ll x;
+        cin >> x;
+        colors[i % 3] += values[i % 3] * x;
+        colors[(i + 1) % 3] += x * values[(i + 2) % 3];
+        colors[(i + 2) % 3] += x * values[(i + 1) % 3];
+    }
 
-    vvll T(N + 1, vll(M + 1, 0));
-    for (int i = 1; i <= N; ++i) {
-        T[i][1] = T[i - 1][1] + P[i][1];
+    for (int i = 2; i >= 0; --i) {
+        cout << colors[i] << " ";
     }
-    for (int j = 1; j <= M; ++j) {
-        T[1][j] = T[1][j - 1] + P[1][j];
-    }
-    for (int i = 1; i <= N; ++i) {
-        for (int j = 2; j <= M; ++j) {
-            T[i][j] = max(T[i][j - 1] + P[i][j], T[i - 1][j] + P[i][j]);
-        }
-    }
-    for (int i = 1; i <= N; ++i) {
-        cout << T[i][M] << " ";
-    }
+    cout << endl;
     return 0;
 }
 
 /*
-2 3
-1 2 3
-3 2 1
+3
+1 1 1
+1 1 1
+
+7
+6 2 4 5 1 1 4
+2 5 1 4 2 3 4
 
  */
