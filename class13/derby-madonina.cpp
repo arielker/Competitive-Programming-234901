@@ -21,7 +21,8 @@ signed main() {
         }
         int t = p[i].second;
         if (t >= s[tot]) {
-            s[++tot] = t;
+            tot++;
+            s[tot] = t;
         } else {
             *upper_bound(s + 1, s + 1 + tot, t) = t;
         }
