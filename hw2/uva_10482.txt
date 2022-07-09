@@ -1,0 +1,8 @@
+This question was a classic DP question.
+Accordingly, to avoid redundant callings, we used a cache matrix.
+The first step was to save the total candies weight- while summing the input.
+Now, we have three children who want candies, so there are three options (give candy #X to child 1/2/3).
+When no candies are left, the recursion returns the max differences between the children.
+The overall minimum from all the options is the one who actually taken.
+
+Classic DP question, no specialty :).

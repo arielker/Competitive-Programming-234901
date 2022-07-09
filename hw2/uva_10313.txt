@@ -1,0 +1,8 @@
+This is a known CS question, let's solve it with a classic DP method.
+In this type of question, there is no connection between the input to the needed calculations.
+Accordingly, we have done some preprocessing to get all the relevant option
+(according to the mentioned bounds in the question).
+The init phase is the only easily known fact- there is only one way to pay nothing.
+The rest of the options are calculated based on two options- the first one is the last option and the sum bigger than the coins option.
+
+After the preprocessing is done, we access the relevant value from the already filled cache.

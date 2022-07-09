@@ -1,0 +1,20 @@
+First of all, we used C++ implementation of the graph class and Dinic's Algorithm taken from https://www.geeksforgeeks.org/dinics-algorithm-maximum-flow/.
+
+Algorithm:
+* We noticed that the smallest possible army required to defend the kingdom is the max-flow of a the graph we will now describe.
+* We will work with a graph where the nodes are built from the squares of the given strategic map, * 
+	the edges are built from every neighboor squares (up, down, left, right), 
+	and the weights are the number of bannermen necessary to defend each square (the square label given from input).
+* As we know, the Dinic's algorithm uses a graph where the weights are on the edges.
+	However, in our problem, as mentioned, the weights are given from the input on the "nodes". 
+	And so, in our graph, every square (original node) v is represented with two new nodes - v_in and v_out, with an edge going from v_in to v_out carrying the square weight.
+	That is, every in-going edge to v will now go to v_in, and every out-going edge from v will now go from v_out with the weight of v.
+* Finally, we added a source node s that connects all border squares with INF weight (every possible entry), 
+	and a target node t that represents the castle location.
+* After we built this graph, we ran the Dinic's max-flow algorithm (fold-fulkerson wasn't fast enough), and printed the result as final answer.
+
+Time complexity:
+1. Building the graph - O(R * C).
+	O(R*C) nodes and each node has at most 4 edges.
+2. Dinic - O((R * C)^3).
+Overall - O((R * C)^3)

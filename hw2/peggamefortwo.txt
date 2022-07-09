@@ -1,0 +1,33 @@
+
+Algorithm:
+* Giving initial state of the board, we used backtracking to calculate the value of Jacquez’s score minus Alia’s score at the end of the game.
+	We went through all options and took the max value of every option, but we used cache matrix (memorization) to save visited states and reduce time+space complexity.
+	State is a board arrangment and the cache return the value from this state.
+* For every board peg, we try to move it to all possible diractions (2 holes right/left/up/down),
+	While chcking if the move is legal:
+		- The new location is not outside the board.
+		- The new location is not taken.
+		- We dont move the peg above empty hole.
+		- The jumps is in straight lines (horizontally or diagonally).
+* If all is legal, we make the move by updating the required holes:
+		- The old place value is now 0.
+		- The place we jumped above is now with value 0.
+		- The new location contains the value of the peg we moved.
+* We calculate the optimal value of the new board and take the maximal value between the current one and the new one:
+		- If the there are no more possible moves, the new value is the max between the saved one and the jump value.
+		- Else, the new value is the max between the saved one and the jump value minus the next move value return from the recrusion 
+			(minus because it is the other player turn).
+* We return the previous board state and try to move another peg.
+* We save the OPT value calculated for this board state in the cache and returns it.
+* Finnaly, we print the calculated OPT value returned from the recrusion. 
+ 
+Time complexity:
+	Looking at the recrusion tree, we can see that for each iteration we go through all board pegs (initially 14), 
+	and for each legal (importent because it reduces the amount of activation calls) 
+	location we active the recrusion function at most 4 times (4 potentionaly moves - right/left/up/down),
+	where every call deduce one peg from the board.
+	That is, in the worst case (not realy getting there because we dont realy take all positions due to illegality and cache), 
+	the recrusion complexity should be: f(n) = 4 * f(n-1) = O(4^(n-1))
+		where n is the number of pegs in the board.
+	However, thanks to the memorization, we get much better results.
+Overall - O(4^(n))

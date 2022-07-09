@@ -1,0 +1,27 @@
+
+Algorithm:
+* We start with calculating and saving all possible legal states in a vector(lets call him possible_states), 
+	where state is the locations of 4 players on a row (a state is סדור).
+	Keeping in mind that any cell of the grid can not be visited more than one player, 
+	and so each player is located in another collumn.
+* We save a matrix to count all possible legal moves from state i to state j (lets call her ways_amount).
+	A move is legal if all players advanced only one row and advanced/went back only one collumn, where the collumn number and row number are legal.
+	Here we calculate over all permutations of the state, because we saved state סדור, but it doesnt realy matter which player is in which collumn.
+	To calculate that, we use possible_states vector to iterate over all possible state moves.
+* After calculating ways_amount, we recive input N - number of rows.
+	To find the number of ways to reach row N, we use ways_amount and multiply it with itself N-1 times - that is we get ways_amount^(N-1).
+	This is true because this way, for each possible move, we multiply the amount of legal moves we got so far with the the amount of legal moves of the next state, as saved in ways_amount.
+* Finaly, we get the initial state and use it as index (using map) to the ways_amount^(N-1) matrix.
+	This way we get the number of ways to reach row N, starting with the initial state.
+
+Time complexity:
+1. Build possible_states - O(7 choose 4) = O(35)
+	7 collumns to place 4 players
+	(*) Calc only once and use for all tests.
+2. Build ways_amount - O((7 choose 4)^2 * 4!) = O(29400)
+	going through all pair of legal states - (7 choose 4)^2
+	and for each pair get all permutations of the state.
+	(*) Calc only once and use for all tests.
+3. For each test case, calc ways_amount^(N-1) - O(logN).
+	we used fast exponentiation algorithm.
+Overall - O(O(7 choose 4) + O((7 choose 4)^2 * 4!) + T*O(logN)) = O(29435 + T*logN)
